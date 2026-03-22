@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Привіт">
+<title>Привіт</title>
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --night: #0a0a0f;
+    --surface: #1c1c26;
+    --rim: rgba(255,255,255,0.07);
+    --muted: rgba(255,255,255,0.35);
+    --soft: rgba(255,255,255,0.6);
+    --bright: rgba(255,255,255,0.92);
+    --accent: #c8a96e;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  html, body { height: 100%; background: var(--night); color: var(--bright); font-family: var(--font-serif); -webkit-font-smoothing: antialiased; overflow: hidden; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: env(safe-area-inset-top,20px) 28px env(safe-area-inset-bottom,20px); min-height: 100dvh; position: relative; }
+
+  .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0; animation: orb-in 2s ease forwards; pointer-events: none; z-index: 0; }
+  .orb-1 { width: 340px; height: 340px; top: -80px; right: -60px; background: radial-gradient(circle, rgba(200,169,110,0.18), transparent 70%); animation-delay: 0.2s; }
+  .orb-2 { width: 260px; height: 260px; bottom: -40px; left: -60px; background: radial-gradient(circle, rgba(126,184,200,0.14), transparent 70%); animation-delay: 0.5s; }
+  @keyframes orb-in { to { opacity: 1; } }
+
+  .container { position: relative; z-index: 1; width: 100%; max-width: 420px; }
+
+  .clock-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 32px; opacity: 0; transform: translateY(8px); animation: fade-up 0.6s ease 0.1s forwards; }
+  .clock-time { font-family: var(--font-mono); font-size: 13px; font-weight: 300; color: var(--accent); letter-spacing: 0.12em; }
+  .clock-sep { color: var(--rim); font-size: 11px; }
+  .clock-date { font-family: var(--font-mono); font-size: 12px; font-weight: 300; color: var(--muted); letter-spacing: 0.06em; }
+
+  .holiday-badge { display: none; align-items: center; gap: 8px; margin-bottom: 20px; opacity: 0; animation: fade-up 0.5s ease 0.3s forwards; }
+  .holiday-badge.visible { display: flex; }
+  .holiday-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .holiday-text { font-family: var(--font-mono); font-size: 11px; font-weight: 300; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .period-label { font-family: var(--font-mono); font-size: 11px; font-weight: 300; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px; opacity: 0; animation: fade-up 0.5s ease 0.25s forwards; }
+  .greeting-main { font-size: clamp(26px, 7.5vw, 38px); font-weight: 300; font-style: italic; line-height: 1.3; color: var(--bright); margin-bottom: 20px; min-height: 80px; opacity: 0; animation: fade-up 0.7s ease 0.4s forwards; }
+  .divider { width: 40px; height: 0.5px; background: var(--accent); opacity: 0; margin-bottom: 20px; animation: fade-up 0.5s ease 0.6s forwards; }
+  .greeting-sub { font-size: 15px; font-weight: 300; line-height: 1.7; color: var(--soft); min-height: 44px; opacity: 0; animation: fade-up 0.6s ease 0.7s forwards; }
+
+  .btn-wrap { margin-top: 44px; opacity: 0; animation: fade-up 0.5s ease 0.9s forwards; }
+  .btn-refresh { display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 0.5px solid rgba(255,255,255,0.18); border-radius: 40px; padding: 10px 22px; font-family: var(--font-mono); font-size: 11px; font-weight: 300; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: border-color 0.2s, color 0.2s; -webkit-tap-highlight-color: transparent; }
+  .btn-refresh:hover, .btn-refresh:active { border-color: rgba(255,255,255,0.4); color: var(--soft); }
+  .btn-refresh svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+  .setup-screen { position: fixed; inset: 0; background: var(--night); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 28px; }
+  .setup-screen.hidden { display: none; }
+  .setup-title { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+  .setup-label { font-family: var(--font-serif); font-size: 22px; font-weight: 300; font-style: italic; color: var(--bright); margin-bottom: 8px; text-align: center; line-height: 1.3; }
+  .setup-hint { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 28px; line-height: 1.6; }
+  .setup-input { width: 100%; max-width: 360px; background: var(--surface); border: 0.5px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px 18px; font-family: var(--font-mono); font-size: 13px; font-weight: 300; color: var(--bright); outline: none; margin-bottom: 16px; letter-spacing: 0.04em; }
+  .setup-input:focus { border-color: rgba(200,169,110,0.5); }
+  .setup-input::placeholder { color: var(--muted); }
+  .setup-btn { width: 100%; max-width: 360px; background: var(--accent); border: none; border-radius: 12px; padding: 14px; font-family: var(--font-mono); font-size: 12px; font-weight: 400; color: var(--night); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s; }
+  .setup-btn:hover { opacity: 0.85; }
+  .setup-note { margin-top: 20px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-align: center; line-height: 1.7; }
+  .setup-note a { color: var(--accent); text-decoration: none; }
+  .setup-error { color: #e07070; font-family: var(--font-mono); font-size: 12px; margin-top: 12px; display: none; text-align: center; }
+
+  .gear-btn { position: fixed; bottom: calc(env(safe-area-inset-bottom, 16px) + 16px); right: 20px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; opacity: 0.22; transition: opacity 0.2s; z-index: 10; -webkit-tap-highlight-color: transparent; }
+  .gear-btn:hover { opacity: 0.55; }
+  .gear-btn svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 1.5; }
+
+  @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 1px solid rgba(255,255,255,0.12); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+</style>
+</head>
+<body>
+
+<div class="setup-screen hidden" id="setup">
+  <div class="setup-title">Налаштування</div>
+  <div class="setup-label">Gemini API ключ</div>
+  <div class="setup-hint">Безкоштовно · aistudio.google.com</div>
+  <input class="setup-input" id="api-input" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false">
+  <button class="setup-btn" onclick="saveKey()">Зберегти</button>
+  <div class="setup-error" id="setup-error">Невірний ключ або помилка з'єднання</div>
+  <div class="setup-note">
+    Ключ зберігається тільки на вашому пристрої.<br>
+    Отримати безкоштовно: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>
+  </div>
+</div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="container">
+  <div class="clock-row">
+    <span class="clock-time" id="clock-time">--:--</span>
+    <span class="clock-sep">·</span>
+    <span class="clock-date" id="clock-date"></span>
+  </div>
+  <div class="holiday-badge" id="holiday-badge">
+    <div class="holiday-dot"></div>
+    <div class="holiday-text" id="holiday-text"></div>
+  </div>
+  <div class="period-label" id="period-label"></div>
+  <div class="greeting-main" id="greeting-main"><span class="spinner"></span></div>
+  <div class="divider"></div>
+  <div class="greeting-sub" id="greeting-sub"></div>
+  <div class="btn-wrap">
+    <button class="btn-refresh" onclick="generateGreeting()">
+      <svg viewBox="0 0 24 24"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      Нове привітання
+    </button>
+  </div>
+</div>
+
+<button class="gear-btn" onclick="openSettings()" aria-label="Налаштування">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
+
+<script>
+const HOLIDAYS=[
+  [1,1,"Новий рік"],[1,7,"Різдво Христове"],[1,19,"Водохреще"],
+  [2,14,"День закоханих"],[2,23,"День захисника України"],
+  [3,8,"Міжнародний жіночий день"],[4,1,"День гумору"],
+  [5,1,"День праці"],[5,9,"День перемоги над нацизмом"],
+  [6,1,"День захисту дітей"],[6,28,"День Конституції України"],
+  [8,24,"День незалежності України"],[10,14,"День захисників України"],
+  [12,19,"День Святого Миколая"],[12,25,"Різдво католицьке"],
+];
+
+function easter(y){
+  const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4;
+  const f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3);
+  const h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4;
+  const l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+  return[Math.floor((h+l-7*m+114)/31),((h+l-7*m+114)%31)+1];
+}
+
+function checkHoliday(d){
+  const m=d.getMonth()+1,day=d.getDate(),y=d.getFullYear();
+  const f=HOLIDAYS.find(h=>h[0]===m&&h[1]===day);
+  if(f)return f[2];
+  const[em,ed]=easter(y);
+  if(m===em&&day===ed)return"Великдень";
+  const td=new Date(y,em-1,ed+49);
+  if(td.getMonth()+1===m&&td.getDate()===day)return"Трійця";
+  return null;
+}
+
+function getPeriod(h){
+  if(h>=5&&h<12)return{label:"Ранок",uk:"ранку"};
+  if(h>=12&&h<17)return{label:"День",uk:"дня"};
+  if(h>=17&&h<21)return{label:"Вечір",uk:"вечора"};
+  return{label:"Ніч",uk:"ночі"};
+}
+
+const DAYS=["неділя","понеділок","вівторок","середа","четвер","п'ятниця","субота"];
+const MONTHS=["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
+
+function updateClock(){
+  const n=new Date();
+  document.getElementById('clock-time').textContent=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('clock-date').textContent=`${DAYS[n.getDay()]}, ${n.getDate()} ${MONTHS[n.getMonth()]}`;
+}
+
+function getKey(){return localStorage.getItem('gemini_key');}
+
+function saveKey(){
+  const k=document.getElementById('api-input').value.trim();
+  if(!k)return;
+  localStorage.setItem('gemini_key',k);
+  document.getElementById('setup-error').style.display='none';
+  document.getElementById('setup').classList.add('hidden');
+  generateGreeting();
+}
+
+function openSettings(){
+  document.getElementById('api-input').value=getKey()||'';
+  document.getElementById('setup-error').style.display='none';
+  document.getElementById('setup').classList.remove('hidden');
+}
+
+async function callGemini(prompt){
+  const key=getKey();
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      contents:[{parts:[{text:prompt}]}],
+      generationConfig:{temperature:1.1,maxOutputTokens:120}
+    })
+  });
+  if(!r.ok)throw new Error(r.status);
+  const d=await r.json();
+  return d.candidates?.[0]?.content?.parts?.[0]?.text?.trim()||"";
+}
+
+async function generateGreeting(){
+  const now=new Date(),h=now.getHours();
+  const period=getPeriod(h);
+  const holiday=checkHoliday(now);
+  const weekday=DAYS[now.getDay()];
+  const hhmm=`${String(h).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  document.getElementById('period-label').textContent=period.label;
+  const badge=document.getElementById('holiday-badge');
+  if(holiday){document.getElementById('holiday-text').textContent=holiday;badge.classList.add('visible');}
+  else{badge.classList.remove('visible');}
+
+  const mainEl=document.getElementById('greeting-main');
+  const subEl=document.getElementById('greeting-sub');
+  mainEl.innerHTML='<span class="spinner"></span>';
+  subEl.textContent='';
+
+  const p1=holiday
+    ?`Зараз ${hhmm}, ${weekday}. Свято: ${holiday}. Напиши ОДНЕ речення-привітання українською — враховуй і час доби (${period.uk}), і свято. Тепло, щиро, не банально. Тільки текст без лапок.`
+    :`Зараз ${hhmm}, ${weekday}. Напиши ОДНЕ коротке оригінальне привітання для ${period.uk} українською. Не кліше. Живо. Тільки текст без лапок.`;
+
+  const p2=holiday
+    ?`Одне коротке речення-побажання до свята ${holiday} українською. Без привітання. Без лапок.`
+    :`Одне речення про ${period.uk} або про ${weekday}. Підбадьорливо. Без привітання. Без лапок.`;
+
+  try{
+    const[main,sub]=await Promise.all([callGemini(p1),callGemini(p2)]);
+    mainEl.textContent=main;
+    subEl.textContent=sub;
+  }catch(e){
+    mainEl.textContent="Помилка з'єднання";
+    document.getElementById('setup-error').style.display='block';
+    document.getElementById('setup').classList.remove('hidden');
+  }
+}
+
+updateClock();
+setInterval(updateClock,30000);
+if(!getKey()){document.getElementById('setup').classList.remove('hidden');}
+else{generateGreeting();}
+</script>
+</body>
+</html>
