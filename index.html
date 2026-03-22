@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Привіт">
+<title>Привіт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--night:#0a0a0f;--surface:#1c1c26;--muted:rgba(255,255,255,0.35);--soft:rgba(255,255,255,0.6);--bright:rgba(255,255,255,0.92);--accent:#c8a96e;--serif:'Cormorant Garamond',Georgia,serif;--mono:'DM Mono',monospace}
+html,body{height:100%;background:var(--night);color:var(--bright);font-family:var(--serif);-webkit-font-smoothing:antialiased;overflow:hidden}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top,20px) 28px env(safe-area-inset-bottom,20px);min-height:100dvh;position:relative}
+.orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0;animation:orb-in 2s ease forwards;pointer-events:none;z-index:0}
+.orb1{width:340px;height:340px;top:-80px;right:-60px;background:radial-gradient(circle,rgba(200,169,110,0.18),transparent 70%);animation-delay:.2s}
+.orb2{width:260px;height:260px;bottom:-40px;left:-60px;background:radial-gradient(circle,rgba(126,184,200,0.14),transparent 70%);animation-delay:.5s}
+@keyframes orb-in{to{opacity:1}}
+.wrap{position:relative;z-index:1;width:100%;max-width:420px}
+.clk{display:flex;align-items:baseline;gap:12px;margin-bottom:32px;opacity:0;transform:translateY(8px);animation:up .6s ease .1s forwards}
+.clk-t{font-family:var(--mono);font-size:13px;font-weight:300;color:var(--accent);letter-spacing:.12em}
+.clk-d{font-family:var(--mono);font-size:12px;font-weight:300;color:var(--muted);letter-spacing:.06em}
+.hday{display:none;align-items:center;gap:8px;margin-bottom:20px;opacity:0;animation:up .5s ease .3s forwards}
+.hday.on{display:flex}
+.hdot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.htxt{font-family:var(--mono);font-size:11px;font-weight:300;color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
+.per{font-family:var(--mono);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;opacity:0;animation:up .5s ease .25s forwards}
+.main{font-size:clamp(26px,7.5vw,38px);font-weight:300;font-style:italic;line-height:1.3;color:var(--bright);margin-bottom:20px;min-height:80px;opacity:0;animation:up .7s ease .4s forwards}
+.div{width:40px;height:.5px;background:var(--accent);opacity:0;margin-bottom:20px;animation:up .5s ease .6s forwards}
+.sub{font-size:15px;font-weight:300;line-height:1.7;color:var(--soft);min-height:44px;opacity:0;animation:up .6s ease .7s forwards}
+.btnw{margin-top:44px;opacity:0;animation:up .5s ease .9s forwards}
+.btn{display:inline-flex;align-items:center;gap:10px;background:transparent;border:.5px solid rgba(255,255,255,0.18);border-radius:40px;padding:10px 22px;font-family:var(--mono);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s;-webkit-tap-highlight-color:transparent}
+.btn:hover,.btn:active{border-color:rgba(255,255,255,0.4);color:var(--soft)}
+.btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
+.setup{position:fixed;inset:0;background:var(--night);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px}
+.setup.hide{display:none}
+.s-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+.s-label{font-family:var(--serif);font-size:22px;font-weight:300;font-style:italic;color:var(--bright);margin-bottom:8px;text-align:center;line-height:1.3}
+.s-hint{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center;margin-bottom:28px;line-height:1.6}
+.s-input{width:100%;max-width:360px;background:var(--surface);border:.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;font-family:var(--mono);font-size:13px;font-weight:300;color:var(--bright);outline:none;margin-bottom:16px;letter-spacing:.04em}
+.s-input:focus{border-color:rgba(200,169,110,0.5)}
+.s-input::placeholder{color:var(--muted)}
+.s-btn{width:100%;max-width:360px;background:var(--accent);border:none;border-radius:12px;padding:14px;font-family:var(--mono);font-size:12px;font-weight:400;color:var(--night);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .2s}
+.s-btn:hover{opacity:.85}
+.s-err{color:#e07070;font-family:var(--mono);font-size:11px;margin-top:12px;display:none;text-align:center;line-height:1.5;max-width:320px}
+.s-note{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;line-height:1.7}
+.s-note a{color:var(--accent);text-decoration:none}
+.gear{position:fixed;bottom:calc(env(safe-area-inset-bottom,16px) + 16px);right:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;opacity:.22;transition:opacity .2s;z-index:10;-webkit-tap-highlight-color:transparent}
+.gear:hover{opacity:.55}
+.gear svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:1.5}
+@keyframes up{to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp{display:inline-block;width:14px;height:14px;border:1px solid rgba(255,255,255,0.12);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div class="setup hide" id="setup">
+  <div class="s-title">Налаштування</div>
+  <div class="s-label">Gemini API ключ</div>
+  <div class="s-hint">Безкоштовно · aistudio.google.com</div>
+  <input class="s-input" id="key-input" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false">
+  <button class="s-btn" onclick="saveKey()">Зберегти</button>
+  <div class="s-err" id="s-err"></div>
+  <div class="s-note">Ключ зберігається тільки на вашому пристрої.<br><a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a></div>
+</div>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="wrap">
+  <div class="clk">
+    <span class="clk-t" id="ct">--:--</span>
+    <span style="color:rgba(255,255,255,0.07);font-size:11px">·</span>
+    <span class="clk-d" id="cd"></span>
+  </div>
+  <div class="hday" id="hday"><div class="hdot"></div><div class="htxt" id="htxt"></div></div>
+  <div class="per" id="per"></div>
+  <div class="main" id="main"><span class="sp"></span></div>
+  <div class="div"></div>
+  <div class="sub" id="sub"></div>
+  <div class="btnw">
+    <button class="btn" onclick="gen()">
+      <svg viewBox="0 0 24 24"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      Нове привітання
+    </button>
+  </div>
+</div>
+
+<button class="gear" onclick="openS()">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+</button>
+
+<script>
+const H=[[1,1,"Новий рік"],[1,7,"Різдво Христове"],[1,19,"Водохреще"],[2,14,"День закоханих"],[2,23,"День захисника України"],[3,8,"Міжнародний жіночий день"],[4,1,"День гумору"],[5,1,"День праці"],[5,9,"День перемоги над нацизмом"],[6,1,"День захисту дітей"],[6,28,"День Конституції України"],[8,24,"День незалежності України"],[10,14,"День захисників України"],[12,19,"День Святого Миколая"],[12,25,"Різдво католицьке"]];
+function easter(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);return[Math.floor((h+l-7*m+114)/31),((h+l-7*m+114)%31)+1]}
+function holiday(d){const m=d.getMonth()+1,day=d.getDate(),y=d.getFullYear();const f=H.find(h=>h[0]===m&&h[1]===day);if(f)return f[2];const[em,ed]=easter(y);if(m===em&&day===ed)return"Великдень";const t=new Date(y,em-1,ed+49);if(t.getMonth()+1===m&&t.getDate()===day)return"Трійця";return null}
+function period(h){if(h>=5&&h<12)return{l:"Ранок",u:"ранку"};if(h>=12&&h<17)return{l:"День",u:"дня"};if(h>=17&&h<21)return{l:"Вечір",u:"вечора"};return{l:"Ніч",u:"ночі"}}
+const DAYS=["неділя","понеділок","вівторок","середа","четвер","п'ятниця","субота"];
+const MON=["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
+function clock(){const n=new Date();document.getElementById('ct').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById('cd').textContent=DAYS[n.getDay()]+', '+n.getDate()+' '+MON[n.getMonth()]}
+function getKey(){return localStorage.getItem('gkey')||''}
+function saveKey(){const k=document.getElementById('key-input').value.trim();if(!k)return;localStorage.setItem('gkey',k);document.getElementById('s-err').style.display='none';document.getElementById('setup').classList.add('hide');gen()}
+function openS(){document.getElementById('key-input').value=getKey();document.getElementById('s-err').style.display='none';document.getElementById('setup').classList.remove('hide')}
+
+async function gemini(prompt){
+  const key=getKey();
+  const url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key='+key;
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:1.0,maxOutputTokens:150}})});
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message);
+  return d.candidates?.[0]?.content?.parts?.[0]?.text?.trim()||'';
+}
+
+async function gen(){
+  const now=new Date(),h=now.getHours();
+  const p=period(h),hol=holiday(now),wd=DAYS[now.getDay()];
+  const hhmm=String(h).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('per').textContent=p.l;
+  const hd=document.getElementById('hday');
+  if(hol){document.getElementById('htxt').textContent=hol;hd.classList.add('on')}else{hd.classList.remove('on')}
+  const mel=document.getElementById('main'),sel=document.getElementById('sub');
+  mel.innerHTML='<span class="sp"></span>';sel.textContent='';
+  const p1=hol?`Зараз ${hhmm}, ${wd}. Свято: ${hol}. Напиши ОДНЕ речення-привітання українською — час доби (${p.u}) і свято. Тепло, не банально. Тільки текст.`:`Зараз ${hhmm}, ${wd}. ОДНЕ коротке привітання для ${p.u} українською. Оригінально, живо. Тільки текст.`;
+  const p2=hol?`Одне побажання до свята ${hol} українською. Без привітання.`:`Одне речення про ${p.u} або ${wd}. Підбадьорливо. Без привітання.`;
+  try{
+    const[m,s]=await Promise.all([gemini(p1),gemini(p2)]);
+    mel.textContent=m;sel.textContent=s;
+  }catch(e){
+    mel.textContent='';
+    const err=document.getElementById('s-err');
+    err.textContent=e.message;err.style.display='block';
+    document.getElementById('setup').classList.remove('hide');
+  }
+}
+
+clock();setInterval(clock,30000);
+if(!getKey()){document.getElementById('setup').classList.remove('hide')}else{gen()}
+</script>
+</body>
+</html>
