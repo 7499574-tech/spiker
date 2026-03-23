@@ -306,7 +306,8 @@ async function genToast(){
 }
 
 clock();setInterval(clock,30000);
-if(!getKey()){document.getElementById('setup').classList.remove('hide')}else{gen()}
+if(!getKey()){document.getElementById('setup').classList.remove('hide')}
+else{document.getElementById('greet-main').textContent='Натисніть "Нове" для привітання';}
 </script>
 </body>
 </html>
