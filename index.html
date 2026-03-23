@@ -3,189 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0f">
+<meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Привіт">
 <title>Привіт</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=DM+Mono:wght@300&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--night:#0a0a0f;--surface:#1c1c26;--muted:rgba(255,255,255,0.35);--soft:rgba(255,255,255,0.6);--bright:rgba(255,255,255,0.92);--accent:#c8a96e;--serif:'Cormorant Garamond',Georgia,serif;--mono:'DM Mono',monospace}
-html,body{height:100%;background:var(--night);color:var(--bright);font-family:var(--serif);-webkit-font-smoothing:antialiased}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top,20px) 28px env(safe-area-inset-bottom,20px);min-height:100dvh;position:relative;overflow-y:auto}
+:root{
+  --bg:#000;--bg2:#111;--bg3:#1c1c1e;--bg4:#2c2c2e;
+  --t1:#fff;--t2:rgba(255,255,255,0.6);--t3:rgba(255,255,255,0.3);
+  --acc:#c8a96e;--acc2:rgba(200,169,110,0.15);
+  --sep:rgba(255,255,255,0.1);
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Neue',sans-serif;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --mono:'DM Mono',monospace;
+  --r:14px;--r2:20px;
+}
+html{background:var(--bg);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
 
-/* orbs */
-.orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0;animation:orb-in 2s ease forwards;pointer-events:none;z-index:0}
-.orb1{width:340px;height:340px;top:-80px;right:-60px;background:radial-gradient(circle,rgba(200,169,110,0.18),transparent 70%);animation-delay:.2s}
-.orb2{width:260px;height:260px;bottom:-40px;left:-60px;background:radial-gradient(circle,rgba(126,184,200,0.14),transparent 70%);animation-delay:.5s}
-@keyframes orb-in{to{opacity:1}}
+/* nav tabs */
+.tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--sep);padding:0 16px;padding-top:env(safe-area-inset-top,44px);flex-shrink:0}
+.tab{flex:1;padding:14px 0;font-size:13px;font-weight:400;color:var(--t3);text-align:center;cursor:pointer;border-bottom:2px solid transparent;transition:color .2s,border-color .2s;letter-spacing:.02em;-webkit-tap-highlight-color:transparent}
+.tab.on{color:var(--acc);border-bottom-color:var(--acc)}
 
 /* screens */
-.screen{display:none;position:relative;z-index:1;width:100%;max-width:420px;padding-bottom:40px;overflow:visible}
-.screen.on{display:block}
+.screen{display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:28px 20px calc(env(safe-area-inset-bottom,20px) + 80px)}
+.screen.on{display:flex;flex-direction:column}
 
-/* greeting screen */
-.clk{display:flex;align-items:baseline;gap:12px;margin-bottom:32px;opacity:0;transform:translateY(8px);animation:up .6s ease .1s forwards}
-.clk-t{font-family:var(--mono);font-size:13px;font-weight:300;color:var(--accent);letter-spacing:.12em}
-.clk-d{font-family:var(--mono);font-size:12px;font-weight:300;color:var(--muted);letter-spacing:.06em}
-.hday{display:none;align-items:center;gap:8px;margin-bottom:20px}
-.hday.on{display:flex}
-.hdot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
-.htxt{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase}
-.per{font-family:var(--mono);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;opacity:0;animation:up .5s ease .25s forwards}
-.main{font-size:clamp(26px,7.5vw,38px);font-weight:300;font-style:italic;line-height:1.3;color:var(--bright);margin-bottom:20px;min-height:60px;opacity:0;animation:up .7s ease .4s forwards}
-.divl{width:40px;height:.5px;background:var(--accent);opacity:0;margin-bottom:20px;animation:up .5s ease .6s forwards}
-.sub{font-size:15px;font-weight:300;line-height:1.7;color:var(--soft);opacity:0;animation:up .6s ease .7s forwards;word-break:break-word;overflow-wrap:break-word}
-.btnw{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:up .5s ease .9s forwards}
+/* greeting */
+.g-clock{font-family:var(--mono);font-size:12px;color:var(--t3);letter-spacing:.1em;margin-bottom:24px}
+.g-clock span{color:var(--acc)}
+.g-holiday{display:none;align-items:center;gap:8px;margin-bottom:16px;background:var(--acc2);border:1px solid rgba(200,169,110,0.3);border-radius:var(--r);padding:10px 14px}
+.g-holiday.on{display:flex}
+.g-holiday-dot{width:6px;height:6px;border-radius:50%;background:var(--acc);flex-shrink:0}
+.g-holiday-txt{font-size:13px;color:var(--acc);letter-spacing:.04em}
 
-/* buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;background:transparent;border:.5px solid rgba(255,255,255,0.18);border-radius:40px;padding:10px 20px;font-family:var(--mono);font-size:11px;font-weight:300;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s;-webkit-tap-highlight-color:transparent}
-.btn:hover,.btn:active{border-color:rgba(255,255,255,0.4);color:var(--soft)}
-.btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
-.btn-accent{background:var(--accent);border-color:var(--accent);color:var(--night);font-weight:400}
-.btn-accent:hover,.btn-accent:active{background:#b8954f;border-color:#b8954f;color:var(--night)}
+/* mood selector */
+.mood-row{display:flex;gap:8px;margin-bottom:24px}
+.mood{flex:1;text-align:center;padding:10px 6px;background:var(--bg3);border-radius:var(--r);font-size:12px;color:var(--t2);cursor:pointer;border:1px solid transparent;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.mood.on{background:var(--acc2);border-color:rgba(200,169,110,0.4);color:var(--acc)}
 
-/* toast screen */
-.ts-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
-.ts-back{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;cursor:pointer;margin-bottom:32px;-webkit-tap-highlight-color:transparent}
-.ts-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5}
+/* card */
+.card{background:var(--bg3);border-radius:var(--r2);padding:24px 20px;margin-bottom:16px;position:relative}
+.card-label{font-size:11px;font-family:var(--mono);color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.card-main{font-family:var(--serif);font-size:clamp(22px,6vw,32px);font-weight:300;font-style:italic;line-height:1.4;color:var(--t1)}
+.card-sub{font-size:14px;color:var(--t2);line-height:1.65;margin-top:14px;padding-top:14px;border-top:1px solid var(--sep)}
+.card-toast{font-family:var(--serif);font-size:clamp(17px,5vw,22px);font-weight:300;font-style:italic;line-height:1.6;color:var(--t1)}
 
-/* form */
+/* copy btn */
+.copy-btn{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--bg4);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.copy-btn:active{background:rgba(200,169,110,0.3)}
+.copy-btn svg{width:15px;height:15px;stroke:var(--t2);fill:none;stroke-width:1.8}
+.copy-btn.copied svg{stroke:var(--acc)}
+
+/* action buttons */
+.actions{display:flex;gap:10px;margin-top:4px}
+.act-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg3);border:none;border-radius:var(--r);padding:14px;font-size:13px;color:var(--t2);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.act-btn:active{background:var(--bg4)}
+.act-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+.act-btn.primary{background:var(--acc);color:#000;font-weight:500}
+.act-btn.primary:active{background:#b8954f}
+
+/* toast form */
 .field{margin-bottom:20px}
-.field-label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-.field-input{width:100%;background:var(--surface);border:.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:13px 16px;font-family:var(--serif);font-size:16px;font-weight:300;color:var(--bright);outline:none}
+.field-label{font-size:12px;font-family:var(--mono);color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.field-input{width:100%;background:var(--bg3);border:1px solid var(--sep);border-radius:var(--r);padding:14px 16px;font-size:16px;color:var(--t1);outline:none;font-family:var(--sans);-webkit-appearance:none}
 .field-input:focus{border-color:rgba(200,169,110,0.5)}
-.field-input::placeholder{color:var(--muted)}
+.field-input::placeholder{color:var(--t3)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:9px 16px;background:var(--bg3);border:1px solid var(--sep);border-radius:40px;font-size:13px;color:var(--t2);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.pill.on{background:var(--acc2);border-color:rgba(200,169,110,0.4);color:var(--acc)}
 
-/* occasion pills */
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
-.pill{font-family:var(--mono);font-size:11px;padding:8px 14px;border:.5px solid rgba(255,255,255,0.15);border-radius:40px;color:var(--muted);cursor:pointer;letter-spacing:.06em;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.pill.sel{border-color:var(--accent);color:var(--accent);background:rgba(200,169,110,0.08)}
+/* spinner */
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp{display:inline-block;width:16px;height:16px;border:1.5px solid rgba(255,255,255,0.1);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite}
 
-/* mood pills */
-.mood-pills{display:flex;gap:8px;margin-bottom:4px}
-.mood{font-family:var(--mono);font-size:11px;padding:8px 14px;border:.5px solid rgba(255,255,255,0.15);border-radius:40px;color:var(--muted);cursor:pointer;letter-spacing:.06em;transition:all .15s;-webkit-tap-highlight-color:transparent;flex:1;text-align:center}
-.mood.sel{border-color:var(--accent);color:var(--accent);background:rgba(200,169,110,0.08)}
-
-/* toast result */
-.toast-result{margin-top:28px;display:none}
-.toast-result.on{display:block}
-.toast-text{font-size:clamp(18px,5vw,26px);font-weight:300;font-style:italic;line-height:1.5;color:var(--bright);margin-bottom:16px;word-break:break-word;overflow-wrap:break-word}
-.toast-divl{width:40px;height:.5px;background:var(--accent);margin-bottom:16px}
-
-/* setup */
-.setup{position:fixed;inset:0;background:var(--night);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px}
+/* setup overlay */
+.setup{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:0}
 .setup.hide{display:none}
-.s-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
-.s-label{font-family:var(--serif);font-size:22px;font-weight:300;font-style:italic;color:var(--bright);margin-bottom:8px;text-align:center}
-.s-hint{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center;margin-bottom:28px;line-height:1.6}
-.s-input{width:100%;max-width:360px;background:var(--surface);border:.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;font-family:var(--mono);font-size:13px;color:var(--bright);outline:none;margin-bottom:16px}
-.s-input:focus{border-color:rgba(200,169,110,0.5)}
-.s-input::placeholder{color:var(--muted)}
-.s-btn{width:100%;max-width:360px;background:var(--accent);border:none;border-radius:12px;padding:14px;font-family:var(--mono);font-size:12px;color:var(--night);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
-.s-err{color:#e07070;font-family:var(--mono);font-size:11px;margin-top:12px;display:none;text-align:center;max-width:320px;line-height:1.5}
-.s-note{margin-top:20px;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;line-height:1.7}
-.s-note a{color:var(--accent);text-decoration:none}
+.setup-icon{width:64px;height:64px;background:var(--bg3);border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:24px}
+.setup-icon svg{width:30px;height:30px;stroke:var(--acc);fill:none;stroke-width:1.5}
+.setup-title{font-size:22px;font-weight:300;margin-bottom:8px;text-align:center}
+.setup-hint{font-size:14px;color:var(--t2);text-align:center;margin-bottom:32px;line-height:1.5}
+.setup-input{width:100%;max-width:360px;background:var(--bg3);border:1px solid var(--sep);border-radius:var(--r);padding:16px 18px;font-size:16px;color:var(--t1);outline:none;margin-bottom:12px;font-family:var(--mono);letter-spacing:.04em;-webkit-appearance:none}
+.setup-input:focus{border-color:rgba(200,169,110,0.5)}
+.setup-input::placeholder{color:var(--t3)}
+.setup-btn{width:100%;max-width:360px;background:var(--acc);border:none;border-radius:var(--r);padding:16px;font-size:15px;font-weight:500;color:#000;cursor:pointer;letter-spacing:.02em}
+.setup-err{color:#ff6b6b;font-size:13px;margin-top:12px;text-align:center;display:none;line-height:1.5;max-width:320px}
+.setup-note{margin-top:20px;font-size:12px;color:var(--t3);text-align:center;line-height:1.7}
+.setup-note a{color:var(--acc);text-decoration:none}
 
 /* gear */
-.gear{position:fixed;bottom:calc(env(safe-area-inset-bottom,16px)+16px);right:20px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:transparent;border:none;cursor:pointer;opacity:.22;transition:opacity .2s;z-index:10;-webkit-tap-highlight-color:transparent}
-.gear:hover{opacity:.55}
-.gear svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:1.5}
+.gear-btn{position:fixed;bottom:calc(env(safe-area-inset-bottom,16px)+16px);right:16px;width:36px;height:36px;background:var(--bg3);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;-webkit-tap-highlight-color:transparent}
+.gear-btn svg{width:16px;height:16px;stroke:var(--t3);fill:none;stroke-width:1.8}
 
-@keyframes up{to{opacity:1;transform:translateY(0)}}
-@keyframes spin{to{transform:rotate(360deg)}}
-.sp{display:inline-block;width:14px;height:14px;border:1px solid rgba(255,255,255,0.12);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
+.section-gap{height:8px}
 </style>
 </head>
 <body>
 
-<!-- Setup -->
 <div class="setup hide" id="setup">
-  <div class="s-title">Налаштування</div>
-  <div class="s-label">Gemini API ключ</div>
-  <div class="s-hint">Безкоштовно · aistudio.google.com</div>
-  <input class="s-input" id="key-input" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false">
-  <button class="s-btn" onclick="saveKey()">Зберегти</button>
-  <div class="s-err" id="s-err"></div>
-  <div class="s-note">Ключ зберігається тільки на вашому пристрої.<br><a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a></div>
+  <div class="setup-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+  <div class="setup-title">Gemini API ключ</div>
+  <div class="setup-hint">Безкоштовно — ключ зберігається<br>тільки на вашому пристрої</div>
+  <input class="setup-input" id="key-input" type="password" placeholder="AIza..." autocomplete="off" spellcheck="false">
+  <button class="setup-btn" onclick="saveKey()">Зберегти</button>
+  <div class="setup-err" id="s-err"></div>
+  <div class="setup-note"><a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a> → безкоштовно</div>
 </div>
 
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
+<div class="tabs">
+  <div class="tab on" id="tab-greet" onclick="showTab('greet')">Привітання</div>
+  <div class="tab" id="tab-toast" onclick="showTab('toast')">Тост</div>
+</div>
 
-<!-- Greeting screen -->
+<!-- Greeting -->
 <div class="screen on" id="scr-greet">
-  <div class="clk">
-    <span class="clk-t" id="ct">--:--</span>
-    <span style="color:rgba(255,255,255,0.07);font-size:11px">·</span>
-    <span class="clk-d" id="cd"></span>
+  <div class="g-clock"><span id="ct">--:--</span> · <span id="cd"></span></div>
+
+  <div class="g-holiday" id="hday">
+    <div class="g-holiday-dot"></div>
+    <div class="g-holiday-txt" id="htxt"></div>
   </div>
-  <div class="hday" id="hday"><div class="hdot"></div><div class="htxt" id="htxt"></div></div>
-  <div class="per" id="per"></div>
-  <div class="main" id="main"><span class="sp"></span></div>
-  <div class="divl"></div>
-  <div class="sub" id="sub"></div>
-  <div class="btnw">
-    <button class="btn" onclick="gen()">
+
+  <div class="field-label" style="margin-bottom:8px">Настрій</div>
+  <div class="mood-row" style="margin-bottom:24px">
+    <div class="mood on" onclick="selGMood(this)" data-v="тепло і щиро">Тепло</div>
+    <div class="mood" onclick="selGMood(this)" data-v="іронічно і дотепно">Іронічно</div>
+    <div class="mood" onclick="selGMood(this)" data-v="тонко на межі пристойності">На грані</div>
+  </div>
+
+  <div class="card" id="greet-card">
+    <button class="copy-btn" id="copy-greet" onclick="copyText('greet-main','copy-greet')" title="Копіювати">
+      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    </button>
+    <div class="card-label" id="greet-period">Привітання</div>
+    <div class="card-main" id="greet-main"><div class="sp"></div></div>
+    <div class="card-sub" id="greet-sub"></div>
+  </div>
+
+  <div class="actions">
+    <button class="act-btn primary" onclick="gen()">
       <svg viewBox="0 0 24 24"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
       Нове
     </button>
-    <button class="btn" onclick="showToast()">
-      <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-      Тост
-    </button>
   </div>
 </div>
 
-<!-- Toast screen -->
+<!-- Toast -->
 <div class="screen" id="scr-toast">
-  <div class="ts-back" onclick="showGreet()">
-    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-    назад
-  </div>
-  <div class="ts-title">Генератор тосту</div>
-
   <div class="field">
     <div class="field-label">Ім'я</div>
-    <input class="field-input" id="t-name" type="text" placeholder="Іменинник, пара, господарі..." spellcheck="false">
+    <input class="field-input" id="t-name" type="text" placeholder="Іменинник, молодята, господарі..." spellcheck="false">
   </div>
 
   <div class="field">
     <div class="field-label">Привід</div>
     <div class="pills">
-      <div class="pill sel" onclick="selOcc(this)" data-v="день народження">День народження</div>
-      <div class="pill" onclick="selOcc(this)" data-v="весілля">Весілля</div>
-      <div class="pill" onclick="selOcc(this)" data-v="ювілей">Ювілей</div>
-      <div class="pill" onclick="selOcc(this)" data-v="новосілля">Новосілля</div>
+      <div class="pill on" onclick="selPill(this,'occ')" data-v="день народження">День народження</div>
+      <div class="pill" onclick="selPill(this,'occ')" data-v="весілля">Весілля</div>
+      <div class="pill" onclick="selPill(this,'occ')" data-v="ювілей">Ювілей</div>
+      <div class="pill" onclick="selPill(this,'occ')" data-v="новосілля">Новосілля</div>
     </div>
   </div>
 
   <div class="field">
     <div class="field-label">Настрій</div>
-    <div class="mood-pills">
-      <div class="mood sel" onclick="selMood(this)" data-v="ніжно і тепло">Ніжно</div>
-      <div class="mood" onclick="selMood(this)" data-v="іронічно і дотепно">Іронічно</div>
-      <div class="mood" onclick="selMood(this)" data-v="тонко на межі пристойності">На грані</div>
+    <div class="mood-row">
+      <div class="mood on" onclick="selPill(this,'mood')" data-v="ніжно і тепло">Ніжно</div>
+      <div class="mood" onclick="selPill(this,'mood')" data-v="іронічно і дотепно">Іронічно</div>
+      <div class="mood" onclick="selPill(this,'mood')" data-v="тонко на межі пристойності">На грані</div>
     </div>
   </div>
 
-  <button class="btn btn-accent" style="width:100%;justify-content:center;margin-top:8px" onclick="genToast()">
+  <button class="act-btn primary" style="margin-bottom:20px" onclick="genToast()">
+    <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
     Згенерувати тост
   </button>
 
-  <div class="toast-result" id="toast-result">
-    <div class="toast-divl" style="margin-top:28px"></div>
-    <div class="toast-text" id="toast-text"></div>
-    <button class="btn" style="margin-top:8px" onclick="genToast()">
+  <div class="card" id="toast-card" style="display:none">
+    <button class="copy-btn" id="copy-toast" onclick="copyText('toast-text','copy-toast')" title="Копіювати">
+      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    </button>
+    <div class="card-label">Тост</div>
+    <div class="card-toast" id="toast-text"></div>
+  </div>
+
+  <div class="actions" id="toast-actions" style="display:none">
+    <button class="act-btn" onclick="genToast()">
       <svg viewBox="0 0 24 24"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
       Інший варіант
     </button>
   </div>
 </div>
 
-<button class="gear" onclick="openS()">
+<button class="gear-btn" onclick="openSettings()">
   <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
 </button>
 
@@ -193,41 +209,69 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 const H=[[1,1,"Новий рік"],[1,7,"Різдво Христове"],[1,19,"Водохреще"],[2,14,"День закоханих"],[2,23,"День захисника України"],[3,8,"Міжнародний жіночий день"],[4,1,"День гумору"],[5,1,"День праці"],[5,9,"День перемоги над нацизмом"],[6,1,"День захисту дітей"],[6,28,"День Конституції України"],[8,24,"День незалежності України"],[10,14,"День захисників України"],[12,19,"День Святого Миколая"],[12,25,"Різдво католицьке"]];
 function easter(y){const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);return[Math.floor((h+l-7*m+114)/31),((h+l-7*m+114)%31)+1]}
 function holiday(d){const m=d.getMonth()+1,day=d.getDate(),y=d.getFullYear();const f=H.find(h=>h[0]===m&&h[1]===day);if(f)return f[2];const[em,ed]=easter(y);if(m===em&&day===ed)return"Великдень";const t=new Date(y,em-1,ed+49);if(t.getMonth()+1===m&&t.getDate()===day)return"Трійця";return null}
-function period(h){if(h>=5&&h<12)return{l:"Ранок",u:"ранку"};if(h>=12&&h<17)return{l:"День",u:"дня"};if(h>=17&&h<21)return{l:"Вечір",u:"вечора"};return{l:"Ніч",u:"ночі"}}
+function period(h){if(h>=5&&h<12)return"Ранок";if(h>=12&&h<17)return"День";if(h>=17&&h<21)return"Вечір";return"Ніч"}
+function periodUk(h){if(h>=5&&h<12)return"ранку";if(h>=12&&h<17)return"дня";if(h>=17&&h<21)return"вечора";return"ночі"}
 const DAYS=["неділя","понеділок","вівторок","середа","четвер","п'ятниця","субота"];
 const MON=["січня","лютого","березня","квітня","травня","червня","липня","серпня","вересня","жовтня","листопада","грудня"];
 
 function clock(){const n=new Date();document.getElementById('ct').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById('cd').textContent=DAYS[n.getDay()]+', '+n.getDate()+' '+MON[n.getMonth()]}
+
 function getKey(){return localStorage.getItem('gkey')||''}
 function saveKey(){const k=document.getElementById('key-input').value.trim();if(!k)return;localStorage.setItem('gkey',k);document.getElementById('s-err').style.display='none';document.getElementById('setup').classList.add('hide');gen()}
-function openS(){document.getElementById('key-input').value=getKey();document.getElementById('s-err').style.display='none';document.getElementById('setup').classList.remove('hide')}
-function showToast(){document.getElementById('scr-greet').classList.remove('on');document.getElementById('scr-toast').classList.add('on')}
-function showGreet(){document.getElementById('scr-toast').classList.remove('on');document.getElementById('scr-greet').classList.add('on')}
+function openSettings(){document.getElementById('key-input').value=getKey();document.getElementById('s-err').style.display='none';document.getElementById('setup').classList.remove('hide')}
 
-function selOcc(el){document.querySelectorAll('.pill').forEach(p=>p.classList.remove('sel'));el.classList.add('sel')}
-function selMood(el){document.querySelectorAll('.mood').forEach(m=>m.classList.remove('sel'));el.classList.add('sel')}
-function getOcc(){return document.querySelector('.pill.sel')?.dataset.v||'день народження'}
-function getMood(){return document.querySelector('.mood.sel')?.dataset.v||'ніжно і тепло'}
+function showTab(t){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('on'));
+  document.getElementById('tab-'+t).classList.add('on');
+  document.getElementById('scr-'+t).classList.add('on');
+}
+
+function selGMood(el){document.querySelectorAll('#scr-greet .mood').forEach(m=>m.classList.remove('on'));el.classList.add('on')}
+function selPill(el,group){
+  const parent=el.closest('.pills,.mood-row');
+  parent.querySelectorAll('.pill,.mood').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+}
+function getGMood(){return document.querySelector('#scr-greet .mood.on')?.dataset.v||'тепло і щиро'}
+function getOcc(){return document.querySelector('#scr-toast .pills .pill.on')?.dataset.v||'день народження'}
+function getTMood(){return document.querySelector('#scr-toast .mood-row .mood.on')?.dataset.v||'ніжно і тепло'}
+
+function copyText(elId, btnId){
+  const text=document.getElementById(elId)?.textContent||'';
+  navigator.clipboard?.writeText(text).then(()=>{
+    const btn=document.getElementById(btnId);
+    btn.classList.add('copied');
+    setTimeout(()=>btn.classList.remove('copied'),1500);
+  });
+}
 
 async function gemini(prompt){
   const key=getKey();
-  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:1.1,maxOutputTokens:600}})});
+  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+key,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:1.1,maxOutputTokens:600}})
+  });
   const d=await r.json();
   if(d.error)throw new Error(d.error.message);
-  const t=d.candidates?.[0]?.content?.parts?.[0]?.text||'';
-  return t.replace(/\*\*/g,'').replace(/\*/g,'').replace(/^#+\s*/gm,'').trim();
+  return(d.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/\*\*/g,'').replace(/\*/g,'').replace(/^#+\s*/gm,'').trim();
 }
 
 async function gen(){
   const now=new Date(),h=now.getHours();
-  const p=period(h),hol=holiday(now),wd=DAYS[now.getDay()];
-  document.getElementById('per').textContent=p.l;
+  const p=period(h),pu=periodUk(h),hol=holiday(now),wd=DAYS[now.getDay()];
+  const mood=getGMood();
+  document.getElementById('greet-period').textContent=p;
   const hd=document.getElementById('hday');
   if(hol){document.getElementById('htxt').textContent=hol;hd.classList.add('on')}else{hd.classList.remove('on')}
-  const mel=document.getElementById('main'),sel=document.getElementById('sub');
-  mel.innerHTML='<span class="sp"></span>';sel.textContent='';
-  const p1=hol?`Напиши ОДНЕ коротке речення-привітання українською. Час: ${p.u}. Свято: ${hol}. Без списків. Без зірочок. Тільки одне речення.`:`Напиши ОДНЕ коротке речення-привітання для ${p.u} українською. День тижня: ${wd}. Без списків. Без зірочок. Тільки одне речення.`;
-  const p2=hol?`Напиши ОДНЕ коротке речення-побажання до свята ${hol} українською. Без списків. Без зірочок. Тільки одне речення.`:`Напиши ОДНЕ коротке підбадьорливе речення про ${p.u} або ${wd} українською. Без списків. Без зірочок. Тільки одне речення.`;
+  const mel=document.getElementById('greet-main'),sel=document.getElementById('greet-sub');
+  mel.innerHTML='<div class="sp"></div>';sel.textContent='';
+  const p1=hol
+    ?`Напиши ОДНЕ речення-привітання українською. Час: ${pu}. Свято: ${hol}. Настрій: ${mood}. Тільки текст, без зірочок, без списків.`
+    :`Напиши ОДНЕ речення-привітання для ${pu} українською. День: ${wd}. Настрій: ${mood}. Тільки текст, без зірочок, без списків.`;
+  const p2=hol
+    ?`Напиши ОДНЕ речення-побажання до свята ${hol} українською. Настрій: ${mood}. Тільки текст.`
+    :`Напиши ОДНЕ речення про ${pu} або ${wd} українською. Настрій: ${mood}. Підбадьорливо. Тільки текст.`;
   try{
     const[m,s]=await Promise.all([gemini(p1),gemini(p2)]);
     mel.textContent=m;sel.textContent=s;
@@ -241,19 +285,19 @@ async function gen(){
 
 async function genToast(){
   const name=document.getElementById('t-name').value.trim();
-  const occ=getOcc(),mood=getMood();
+  const occ=getOcc(),mood=getTMood();
   const nameStr=name?`Ім'я: ${name}.`:'';
-  const prompt=`Напиши тост українською мовою. ${nameStr} Привід: ${occ}. Настрій: ${mood}. Тост має бути 3-5 речень, живий, запам'ятовуваний. Без списків. Без зірочок. Тільки текст тосту.`;
-  const res=document.getElementById('toast-result');
+  const prompt=`Напиши тост українською. ${nameStr} Привід: ${occ}. Настрій: ${mood}. 3-5 речень, живий, без кліше. Без зірочок. Тільки текст тосту.`;
+  const card=document.getElementById('toast-card');
   const txt=document.getElementById('toast-text');
-  txt.innerHTML='<span class="sp"></span>';
-  res.classList.add('on');
+  const actions=document.getElementById('toast-actions');
+  card.style.display='block';
+  actions.style.display='flex';
+  txt.innerHTML='<div class="sp"></div>';
   try{
     const t=await gemini(prompt);
     txt.textContent=t;
-  }catch(e){
-    txt.textContent='Помилка: '+e.message;
-  }
+  }catch(e){txt.textContent='Помилка: '+e.message}
 }
 
 clock();setInterval(clock,30000);
