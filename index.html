@@ -277,9 +277,14 @@ async function gen(){
     mel.textContent=m;sel.textContent=s;
   }catch(e){
     mel.textContent='';
-    const err=document.getElementById('s-err');
-    err.textContent=e.message;err.style.display='block';
-    document.getElementById('setup').classList.remove('hide');
+    if(e.message.includes('quota')||e.message.includes('429')){
+      mel.textContent='Зачекайте хвилину...';
+      sel.textContent='Перевищено ліміт запитів. Спробуйте ще раз.';
+    } else {
+      const err=document.getElementById('s-err');
+      err.textContent=e.message;err.style.display='block';
+      document.getElementById('setup').classList.remove('hide');
+    }
   }
 }
 
