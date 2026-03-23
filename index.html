@@ -134,7 +134,7 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
   <div class="mood-row" style="margin-bottom:24px">
     <div class="mood on" onclick="selGMood(this)" data-v="тепло і щиро">Тепло</div>
     <div class="mood" onclick="selGMood(this)" data-v="іронічно і дотепно">Іронічно</div>
-    <div class="mood" onclick="selGMood(this)" data-v="тонко на межі пристойності">На грані</div>
+    <div class="mood" onclick="selGMood(this)" data-v="пікантно, з еротичним натяком, сміливо але не вульгарно">На грані</div>
   </div>
 
   <div class="card" id="greet-card">
@@ -176,7 +176,7 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
     <div class="mood-row">
       <div class="mood on" onclick="selPill(this,'mood')" data-v="ніжно і тепло">Ніжно</div>
       <div class="mood" onclick="selPill(this,'mood')" data-v="іронічно і дотепно">Іронічно</div>
-      <div class="mood" onclick="selPill(this,'mood')" data-v="тонко на межі пристойності">На грані</div>
+      <div class="mood" onclick="selPill(this,'mood')" data-v="пікантно, з еротичним натяком, сміливо але не вульгарно">На грані</div>
     </div>
   </div>
 
@@ -238,8 +238,13 @@ function getOcc(){return document.querySelector('#scr-toast .pills .pill.on')?.d
 function getTMood(){return document.querySelector('#scr-toast .mood-row .mood.on')?.dataset.v||'ніжно і тепло'}
 
 function copyText(elId, btnId){
-  const text=document.getElementById(elId)?.textContent||'';
-  navigator.clipboard?.writeText(text).then(()=>{
+  const main=document.getElementById('greet-main')?.textContent||'';
+  const sub=document.getElementById('greet-sub')?.textContent||'';
+  const toast=document.getElementById('toast-text')?.textContent||'';
+  let text='';
+  if(elId==='greet-main') text=main+(sub?'\n'+sub:'');
+  else text=toast;
+  navigator.clipboard?.writeText(text.trim()).then(()=>{
     const btn=document.getElementById(btnId);
     btn.classList.add('copied');
     setTimeout(()=>btn.classList.remove('copied'),1500);
