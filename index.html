@@ -13,8 +13,8 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--night:#0a0a0f;--surface:#1c1c26;--muted:rgba(255,255,255,0.35);--soft:rgba(255,255,255,0.6);--bright:rgba(255,255,255,0.92);--accent:#c8a96e;--serif:'Cormorant Garamond',Georgia,serif;--mono:'DM Mono',monospace}
-html,body{height:100%;background:var(--night);color:var(--bright);font-family:var(--serif);-webkit-font-smoothing:antialiased;overflow:hidden}
-body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top,20px) 28px env(safe-area-inset-bottom,20px);min-height:100dvh;position:relative}
+html,body{height:100%;background:var(--night);color:var(--bright);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top,20px) 28px env(safe-area-inset-bottom,20px);min-height:100dvh;position:relative;overflow-y:auto}
 .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:0;animation:orb-in 2s ease forwards;pointer-events:none;z-index:0}
 .orb1{width:340px;height:340px;top:-80px;right:-60px;background:radial-gradient(circle,rgba(200,169,110,0.18),transparent 70%);animation-delay:.2s}
 .orb2{width:260px;height:260px;bottom:-40px;left:-60px;background:radial-gradient(circle,rgba(126,184,200,0.14),transparent 70%);animation-delay:.5s}
