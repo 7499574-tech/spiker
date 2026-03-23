@@ -262,11 +262,7 @@ async function gemini(prompt){
   });
   const d=await r.json();
   if(d.error)throw new Error(d.error.message);
-  let t=(d.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/\*\*/g,'').replace(/\*/g,'').replace(/^#+\s*/gm,'').trim();
-  if(t && !t.endsWith('.') && !t.endsWith('!') && !t.endsWith('?')){
-    const last=Math.max(t.lastIndexOf('.'),t.lastIndexOf('!'),t.lastIndexOf('?'));
-    if(last>0) t=t.substring(0,last+1);
-  }
+  const t=(d.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/\*\*/g,'').replace(/\*/g,'').replace(/^#+\s*/gm,'').trim();
   return t;
 }
 
