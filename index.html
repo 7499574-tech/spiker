@@ -50,7 +50,7 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
 /* card */
 .card{background:var(--bg3);border-radius:var(--r2);padding:24px 20px;margin-bottom:16px;position:relative;overflow:visible}
 .card-label{font-size:11px;font-family:var(--mono);color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
-.card-main{font-family:var(--serif);font-size:clamp(20px,5.5vw,28px);font-weight:300;font-style:italic;line-height:1.5;color:var(--t1)}
+.card-main{font-family:var(--serif);font-size:clamp(17px,4.5vw,22px);font-weight:300;font-style:italic;line-height:1.55;color:var(--t1)}
 .card-sub{font-size:14px;color:var(--t2);line-height:1.65;margin-top:14px;padding-top:14px;border-top:1px solid var(--sep)}
 .card-toast{font-family:var(--serif);font-size:clamp(17px,5vw,22px);font-weight:300;font-style:italic;line-height:1.6;color:var(--t1)}
 
@@ -271,8 +271,8 @@ async function gen(){
   const mel=document.getElementById('greet-main');
   mel.innerHTML='<div class="sp"></div>';
   const prompt=hol
-    ?`Напиши привітання українською — 2 повних закінчених речення. Час доби: ${pu}. Свято: ${hol}. Настрій: ${mood}. Без зірочок, без списків. Обов'язково закінчи останнє речення крапкою.`
-    :`Напиши привітання для ${pu} українською — 2 повних закінчених речення. День тижня: ${wd}. Настрій: ${mood}. Без зірочок, без списків. Обов'язково закінчи останнє речення крапкою.`;
+    ?`Напиши привітання українською. Рівно 2 речення. Час доби: ${pu}. Свято: ${hol}. Настрій: ${mood}. Без зірочок. Кожне речення закінчується крапкою.`
+    :`Напиши привітання для ${pu} українською. Рівно 2 речення. День тижня: ${wd}. Настрій: ${mood}. Без зірочок. Кожне речення закінчується крапкою.`;
   try{
     const m=await gemini(prompt);
     mel.textContent=m;
