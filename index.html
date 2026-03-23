@@ -50,7 +50,7 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
 /* card */
 .card{background:var(--bg3);border-radius:var(--r2);padding:24px 20px;margin-bottom:16px;position:relative}
 .card-label{font-size:11px;font-family:var(--mono);color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
-.card-main{font-family:var(--serif);font-size:clamp(22px,6vw,32px);font-weight:300;font-style:italic;line-height:1.4;color:var(--t1)}
+.card-main{font-family:var(--serif);font-size:clamp(20px,5.5vw,28px);font-weight:300;font-style:italic;line-height:1.5;color:var(--t1)}
 .card-sub{font-size:14px;color:var(--t2);line-height:1.65;margin-top:14px;padding-top:14px;border-top:1px solid var(--sep)}
 .card-toast{font-family:var(--serif);font-size:clamp(17px,5vw,22px);font-weight:300;font-style:italic;line-height:1.6;color:var(--t1)}
 
@@ -132,9 +132,9 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
 
   <div class="field-label" style="margin-bottom:8px">Настрій</div>
   <div class="mood-row" style="margin-bottom:24px">
-    <div class="mood on" onclick="selGMood(this)" data-v="тепло і щиро">Тепло</div>
-    <div class="mood" onclick="selGMood(this)" data-v="іронічно і дотепно">Іронічно</div>
-    <div class="mood" onclick="selGMood(this)" data-v="пікантно, з еротичним натяком, сміливо але не вульгарно">На грані</div>
+    <div class="mood on" onclick="selGMood(this)" data-v="ніжно і щиро, як тепле обійняття">Ніжно</div>
+    <div class="mood" onclick="selGMood(this)" data-v="іронічно і дотепно, з гумором">Іронічно</div>
+    <div class="mood" onclick="selGMood(this)" data-v="пікантно, з легким еротичним підтекстом, сміливо але елегантно">Пікантно</div>
   </div>
 
   <div class="card" id="greet-card">
@@ -143,7 +143,6 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
     </button>
     <div class="card-label" id="greet-period">Привітання</div>
     <div class="card-main" id="greet-main"><div class="sp"></div></div>
-    <div class="card-sub" id="greet-sub"></div>
   </div>
 
   <div class="actions">
@@ -174,9 +173,9 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
   <div class="field">
     <div class="field-label">Настрій</div>
     <div class="mood-row">
-      <div class="mood on" onclick="selPill(this,'mood')" data-v="ніжно і тепло">Ніжно</div>
-      <div class="mood" onclick="selPill(this,'mood')" data-v="іронічно і дотепно">Іронічно</div>
-      <div class="mood" onclick="selPill(this,'mood')" data-v="пікантно, з еротичним натяком, сміливо але не вульгарно">На грані</div>
+      <div class="mood on" onclick="selPill(this,'mood')" data-v="ніжно і щиро, як тепле обійняття">Ніжно</div>
+      <div class="mood" onclick="selPill(this,'mood')" data-v="іронічно і дотепно, з гумором">Іронічно</div>
+      <div class="mood" onclick="selPill(this,'mood')" data-v="пікантно, з легким еротичним підтекстом, сміливо але елегантно">Пікантно</div>
     </div>
   </div>
 
@@ -269,23 +268,19 @@ async function gen(){
   document.getElementById('greet-period').textContent=p;
   const hd=document.getElementById('hday');
   if(hol){document.getElementById('htxt').textContent=hol;hd.classList.add('on')}else{hd.classList.remove('on')}
-  const mel=document.getElementById('greet-main'),sel=document.getElementById('greet-sub');
-  mel.innerHTML='<div class="sp"></div>';sel.textContent='';
-  const p1=hol
-    ?`Напиши ОДНЕ речення-привітання українською. Час: ${pu}. Свято: ${hol}. Настрій: ${mood}. Тільки текст, без зірочок, без списків.`
-    :`Напиши ОДНЕ речення-привітання для ${pu} українською. День: ${wd}. Настрій: ${mood}. Тільки текст, без зірочок, без списків.`;
-  const p2=hol
-    ?`Напиши ОДНЕ речення-побажання до свята ${hol} українською. Настрій: ${mood}. Тільки текст.`
-    :`Напиши ОДНЕ речення про ${pu} або ${wd} українською. Настрій: ${mood}. Підбадьорливо. Тільки текст.`;
+  const mel=document.getElementById('greet-main');
+  mel.innerHTML='<div class="sp"></div>';
+  const prompt=hol
+    ?`Напиши коротке привітання українською — 2-3 речення. Час доби: ${pu}. Свято: ${hol}. Настрій: ${mood}. Це суцільний текст без розділення на частини, без заголовків, без зірочок, без списків.`
+    :`Напиши коротке привітання для ${pu} українською — 2-3 речення. День тижня: ${wd}. Настрій: ${mood}. Це суцільний текст без розділення на частини, без заголовків, без зірочок, без списків.`;
   try{
-    const[m,s]=await Promise.all([gemini(p1),gemini(p2)]);
-    mel.textContent=m;sel.textContent=s;
+    const m=await gemini(prompt);
+    mel.textContent=m;
   }catch(e){
-    mel.textContent='';
     if(e.message.includes('quota')||e.message.includes('429')){
-      mel.textContent='Зачекайте хвилину...';
-      sel.textContent='Перевищено ліміт запитів. Спробуйте ще раз.';
+      mel.textContent='Зачекайте хвилину і спробуйте ще раз.';
     } else {
+      mel.textContent='';
       const err=document.getElementById('s-err');
       err.textContent=e.message;err.style.display='block';
       document.getElementById('setup').classList.remove('hide');
