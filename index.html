@@ -256,7 +256,7 @@ async function gemini(prompt){
     body:JSON.stringify({
       system_instruction:{parts:[{text:'Ти талановитий український письменник. Пишеш короткі, влучні привітання і тости — залежно від заданого жанру і настрою. Твій стиль: живий, образний, без штампів і кліше. Ніколи не використовуй зірочки, хештеги, списки. Завжди пишеш завершені речення що закінчуються крапкою, знаком оклику або знаком питання.'}]},
       contents:[{parts:[{text:prompt}]}],
-      generationConfig:{temperature:1.1,maxOutputTokens:500},thinkingConfig:{thinkingBudget:0}
+      generationConfig:{temperature:1.1,maxOutputTokens:500}
     })
   });
   const d=await r.json();
