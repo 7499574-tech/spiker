@@ -22,8 +22,8 @@
   --mono:'DM Mono',monospace;
   --r:14px;--r2:20px;
 }
-html{background:var(--bg);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
-body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
+html{background:var(--bg);color:var(--t1);font-family:var(--sans);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;height:100%}
+body{min-height:100dvh;padding:0;display:flex;flex-direction:column;height:100%}
 
 /* nav tabs */
 .tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--sep);padding:0 16px;padding-top:env(safe-area-inset-top,44px);flex-shrink:0}
@@ -31,7 +31,7 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
 .tab.on{color:var(--acc);border-bottom-color:var(--acc)}
 
 /* screens */
-.screen{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:28px 20px calc(env(safe-area-inset-bottom,20px) + 80px)}
+.screen{display:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:28px 20px calc(env(safe-area-inset-bottom,20px) + 80px);flex:1}
 .screen.on{display:flex;flex-direction:column}
 
 /* greeting */
@@ -48,11 +48,10 @@ body{min-height:100dvh;padding:0;display:flex;flex-direction:column}
 .mood.on{background:var(--acc2);border-color:rgba(200,169,110,0.4);color:var(--acc)}
 
 /* card */
-.card{background:var(--bg3);border-radius:var(--r2);padding:24px 20px;margin-bottom:16px;position:relative;display:block;width:100%}
+.card{background:var(--bg3);border-radius:var(--r2);padding:24px 20px;margin-bottom:16px;position:relative;display:block;width:100%;height:auto}
 .card-label{font-size:11px;font-family:var(--mono);color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
-.card-main{font-family:var(--serif);font-size:clamp(17px,4.5vw,22px);font-weight:300;font-style:italic;line-height:1.55;color:var(--t1)}
-.card-sub{font-size:14px;color:var(--t2);line-height:1.65;margin-top:14px;padding-top:14px;border-top:1px solid var(--sep)}
-.card-toast{font-family:var(--serif);font-size:clamp(17px,5vw,22px);font-weight:300;font-style:italic;line-height:1.6;color:var(--t1)}
+.card-main{font-family:var(--serif);font-size:16px;font-weight:300;font-style:italic;line-height:1.6;color:var(--t1);display:block;height:auto;overflow:visible;white-space:normal}
+.card-toast{font-family:var(--serif);font-size:16px;font-weight:300;font-style:italic;line-height:1.6;color:var(--t1);display:block;height:auto;overflow:visible;white-space:normal}
 
 /* copy btn */
 .copy-btn{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:var(--bg4);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .15s}
@@ -257,7 +256,7 @@ async function gemini(prompt){
     body:JSON.stringify({
       system_instruction:{parts:[{text:'Ти талановитий український письменник. Пишеш короткі, влучні привітання і тости — залежно від заданого жанру і настрою. Твій стиль: живий, образний, без штампів і кліше. Ніколи не використовуй зірочки, хештеги, списки. Завжди пишеш завершені речення що закінчуються крапкою, знаком оклику або знаком питання.'}]},
       contents:[{parts:[{text:prompt}]}],
-      generationConfig:{temperature:1.1,maxOutputTokens:1000}
+      generationConfig:{temperature:1.1,maxOutputTokens:500},thinkingConfig:{thinkingBudget:0}
     })
   });
   const d=await r.json();
@@ -276,8 +275,8 @@ async function gen(){
   const mel=document.getElementById('greet-main');
   mel.innerHTML='<div class="sp"></div>';
   const prompt=hol
-    ?`Напиши привітання українською. Рівно 2 речення. Час доби: ${pu}. Свято: ${hol}. Настрій: ${mood}. Без зірочок. Кожне речення закінчується крапкою.`
-    :`Напиши привітання для ${pu} українською. Рівно 2 речення. День тижня: ${wd}. Настрій: ${mood}. Без зірочок. Кожне речення закінчується крапкою.`;
+    ?`Напиши привітання зі святом ${hol}. Час доби: ${pu}. Настрій: ${mood}. Від живої людини, тепло, без офіційності. 1-2 речення.`
+    :`Напиши привітання. Час доби: ${pu}, ${wd}. Настрій: ${mood}. Від живої людини — починай з "Доброго ранку", "Добрий день", "Добрий вечір" або "На добраніч" залежно від часу. Далі одне живе речення без кліше і без звітності.`;
   try{
     const m=await gemini(prompt);
     mel.textContent=m;
